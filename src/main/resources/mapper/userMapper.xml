@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace可以理解成虚拟文件夹-->
+<mapper namespace="org.lanqiao.dao.IUserDao">
+    <!--resultType：返回值类型-->
+    <!--parameterType:传入参数的类型-->
+    <!--查询所有用户-->
+    <select id="getAllUser" resultType="org.lanqiao.bean.User">
+        select * from user
+    </select>
+    <select id="getUserByCondition" parameterType="org.lanqiao.bean.User" resultType="org.lanqiao.bean.User">
+        select * from user
+        where 1=1
+        <if test="id!=null &amp;&amp; id>0">
+            and id=#{id}
+        </if>
+        <if test="name!=null &amp;&amp; !&quot;&quot;.equals(name)">
+            and name like concat('%',#{name},'%')
+        </if>
+    </select>
+
+    <update id="updateUserByCondition" parameterType="org.lanqiao.bean.User">
+        update user
+        <set>
+
+            <if test="name!=null &amp;&amp; !&quot;&quot;.equals(name)">
+              name=#{name},
+            </if>
+            <if test="id!=null &amp;&amp; id>0">
+                 pass=#{pass}
+            </if>
+            where id=#{id}
+        </set>
+
+    </update>
+
+    <select id="getUserIn" resultType="org.lanqiao.bean.User">
+        select * from user where id in
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+
+</mapper>

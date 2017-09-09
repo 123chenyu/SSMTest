@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace可以理解成虚拟文件夹-->
+<mapper namespace="org.lanqiao.dao.IClassDao">
+    <select id="getClassInfo" resultMap="classMap">
+        select * from teacher t,class c where t.teacher_id=c.teacher_id;
+    </select>
+
+    <resultMap id="classMap" type="org.lanqiao.bean.TeacherClass">
+        <association property="teacher" javaType="org.lanqiao.bean.Teacher" >
+            <id property="teacherId" column="teacher_id"/>
+            <result property="teacherName" column="teacher_name"/>
+        </association>
+        <association property="classs" javaType="org.lanqiao.bean.Class" >
+          <id property="classId" column="class_id"/>
+            <result property="className" column="class_name"/>
+            <result property="teacherId" column="teacher_id"/>
+        </association>
+    </resultMap>
+
+    <select id="getStuById" resultMap="classMap2" parameterType="int">
+     select * from class c,teacher t,student s where c.teacher_id=t.teacher_id and s.class_id=c.class_id
+        and c.class_id=#{classId}
+</select>
+
+    <resultMap id="classMap2" type="org.lanqiao.bean.TeacherClass">
+        <association property="teacher" javaType="org.lanqiao.bean.Teacher" >
+            <id property="teacherId" column="teacher_id"/>
+            <result property="teacherName" column="teacher_name"/>
+        </association>
+        <association property="classes" javaType="org.lanqiao.bean.Class" >
+            <id property="classId" column="class_id"/>
+            <result property="className" column="class_name"/>
+            <result property="teacherId" column="teacher_id"/>
+        </association>
+        <collection property="studentList" ofType="org.lanqiao.bean.Student">
+            <id property="studentId" column="student_id"/>
+            <result property="studentName" column="student_name"/>
+            <result property="studentAge" column="student_age"/>
+            <result property="studentSex" column="student_sex"/>
+            <result property="studentBirthday" column="student_birthday"/>
+            <result property="classId" column="class_id"/>
+        </collection>
+    </resultMap>
+
+
+</mapper>
